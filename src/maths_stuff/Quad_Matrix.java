@@ -1,4 +1,3 @@
-package maths_stuff;
 
 public class Quad_Matrix extends Matrix {
 	int dim;

@@ -1,4 +1,3 @@
-package maths_stuff;
 
 public class Basics {
 
@@ -15,7 +14,7 @@ public class Basics {
 
 		System.out.println(identity(3).difference(new Matrix(Dd)));
 		
-		System.out.println("finished");
+		System.out.println("changed");
 		/*
 		 * double[][] entries; long startTime, stopTime;
 		 * 

@@ -1,4 +1,3 @@
-package maths_stuff;
 
 import java.util.Arrays;
 

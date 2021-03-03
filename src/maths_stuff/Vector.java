@@ -1,4 +1,3 @@
-package maths_stuff;
 
 
 public class Vector extends Matrix {
