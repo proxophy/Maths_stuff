@@ -1,4 +1,4 @@
-package maths_stuff;
+package matric_polynomial;
 
 public class Test1 {
 	public static void main(String[] args) {

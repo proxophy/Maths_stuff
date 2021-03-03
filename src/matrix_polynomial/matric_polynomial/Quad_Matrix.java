@@ -1,4 +1,4 @@
-package maths_stuff;
+package matric_polynomial;
 
 public class Quad_Matrix extends Matrix {
 	int dim;
