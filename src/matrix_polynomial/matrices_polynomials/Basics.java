@@ -1,4 +1,4 @@
-package matric_polynomial;
+package matrices_polynomials;
 
 public class Basics {
 
