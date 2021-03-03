@@ -13,6 +13,15 @@ public class Vector extends Matrix {
 		super(elements);
 		assert this.is_vector();
 	}
+	
+	public Vector(double[] elements) {
+		super(new double[elements.length][]);
+		for (int i = 0; i < elements.length; i++) {
+			elems[i][0] = elements[i];
+		}
+	
+	}
+	
 
 	public double dot_product(Vector w) {
 		
