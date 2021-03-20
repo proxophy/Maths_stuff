@@ -12,6 +12,7 @@ public class Matrix {
 		Vector v = new Vector(new double[][] { { 6.0 }, { 2.5 } });
 		Matrix w = (new Vector(new double[][] { { 6.0 }, { 2.5 } })).transposed_matrix();
 		System.out.println(v.equals(new Vector(test)));
+		System.out.println(v);
 	}
 
 	public Matrix(double[][] elements) {
