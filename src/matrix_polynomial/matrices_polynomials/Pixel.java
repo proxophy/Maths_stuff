@@ -4,6 +4,7 @@ package matrices_polynomials;
 import java.util.ArrayList;
 import java.util.Collections;
 
+
 public class Pixel implements Comparable<Pixel> {
 	int brightness;
 	int[] colors;
