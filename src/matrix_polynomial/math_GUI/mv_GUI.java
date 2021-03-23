@@ -34,30 +34,31 @@ public class mv_GUI implements ActionListener {
 		matrix_A_label = new JLabel("Matrix A");
 		matrix_A_label.setBounds(10, 20, 80, 25);
 		// Matrix A Dim Textfield
-		matrix_A_dim_text = new JTextField(20);
+		matrix_A_dim_text = new JTextField("2 2");
 		matrix_A_dim_text.setBounds(40, 20, 165, 35);
 		// Matrix A Textfield
-		matrix_A_text = new JTextField(20);
+		matrix_A_text = new JTextField("1 1 1 1");
 		matrix_A_text.setBounds(100, 20, 65, 35);
 
 		// Matrix B Label
 		matrix_B_label = new JLabel("Matrix B");
 		matrix_B_label.setBounds(10, 20, 80, 25);
 		// Matrix B Dim Textfield
-		matrix_B_dim_text = new JTextField(20);
+		matrix_B_dim_text = new JTextField("2 2");
 		matrix_B_dim_text.setBounds(40, 20, 65, 35);
 		// Matrix B Textfield
-		matrix_B_text = new JTextField(20);
+		matrix_B_text = new JTextField("2 2 2 2");
 		matrix_B_text.setBounds(100, 20, 165, 35);
 
+		// result text label
+		result_label = new JLabel("Result will be displayed here");
+		result_label.setBounds(100, 100, 165, 100 );
+		JPanel resultPanel = new JPanel();
+		
 		// the clickable button
 		button = new JButton("Click Me");
 		button.addActionListener(this);
 		button.setBounds(100, 20, 165, 35);
-
-		// result text label
-		result_label = new JLabel("Result will be displayed here");
-	//	result_label.setBounds(100, 200, 165, 100);
 
 		panel.add(matrix_A_label);
 		panel.add(matrix_A_dim_text);
@@ -66,12 +67,15 @@ public class mv_GUI implements ActionListener {
 		panel.add(matrix_B_dim_text);
 		panel.add(matrix_B_text);
 		panel.add(button);
-		panel.add(result_label);
+		//panel.add(result_label);
+		resultPanel.add(result_label);
+		resultPanel.setBackground(Color.PINK);
 
-		// set up the frame and display it
+		// set up the frame and display it;
 		frame.add(panel, BorderLayout.CENTER);
+		frame.add(resultPanel, BorderLayout.SOUTH);
 		frame.pack();
-		frame.setSize(500, 500);
+//		frame.setSize(500, 500);
 		frame.setTitle("GUI");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -81,8 +85,6 @@ public class mv_GUI implements ActionListener {
 	// process the button clicks
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == button) {
-			String A_text = "hello" ;
-			String B_text = "world";
 			Scanner matrix_a_dim_scanner = new Scanner(matrix_A_dim_text.getText());
 			Scanner matrix_b_dim_scanner = new Scanner(matrix_B_dim_text.getText());
 			Scanner matrix_a_scanner = new Scanner(matrix_A_text.getText());
@@ -91,6 +93,7 @@ public class mv_GUI implements ActionListener {
 			//read matrix A
 			int[] dimA = new int[2];
 			double[][] elementsA = null;
+			Matrix A;
 			String resultA;
 			try {
 				dimA[0] =  matrix_a_dim_scanner.nextInt();
@@ -101,16 +104,17 @@ public class mv_GUI implements ActionListener {
 						elementsA[i][j] =  matrix_a_scanner.nextDouble();
 					}
 				}
-				Matrix A = new Matrix(elementsA);
-				resultA = String.format("<html>%s</html>", A.toString().replace("\n", "<br>"));
-			//	result_label.setText(result);
+				A = new Matrix(elementsA);
+				resultA = A.toString().replaceAll("\n", "<br>");
+				
 			} catch (Exception ex) {
-				result_label.setText("Exception occured " + Arrays.toString(elementsA));
+				result_label.setText("Matrix A: Exception occured " + Arrays.toString(elementsA));
 				return;
 			} 
 			
 			int[] dimB = new int[2];
 			double[][] elementsB = null;
+			Matrix B;
 			String resultB;
 			try {
 				dimB[0] =  matrix_b_dim_scanner.nextInt();
@@ -122,17 +126,19 @@ public class mv_GUI implements ActionListener {
 						elementsB[i][j] =  matrix_b_scanner.nextDouble();
 					}
 				}
-				Matrix B= new Matrix(elementsB);
-				resultB = String.format("<html>%s</html>", B.toString().replace("\n", "<br>"));
-			//	result_label.setText(resultB);
+				B= new Matrix(elementsB);
+				resultB = B.toString().replaceAll("\n", "<br>");
+				
 			} catch (Exception ex) {
-				result_label.setText("Exception occured " + Arrays.toString(elementsB));
+				result_label.setText("Matrix B: Exception occured " + Arrays.toString(elementsB));
 				return;
 			}
-			result_label.setText("eppis");
-	//		result_label.setText(String.format("<html>%s<br/>%s</html>", resultA, resultA));
-	//		String result = String.format("<html>%s<br/>%s</html>", A_text, B_text);
-	//		result_label.setText(result);
+			
+			Matrix AB = A.product(B);
+			String resultAB =  AB.toString().replaceAll("\n", "<br>");
+			
+			String result = String.format("<html>%s</html>", resultAB);
+			result_label.setText(result);
 		}
 
 	}

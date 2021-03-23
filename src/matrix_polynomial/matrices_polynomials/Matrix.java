@@ -191,18 +191,23 @@ public class Matrix {
 	@Override
 	public String toString() {
 
-		String str = "[";
-		String sep = ",\n ";
+//		String str = "[";
+//		String sep = ",\n ";
+		String str = "";
+		String sep = "\n";
 
 		for (int i = 0; i < m; i++) {
-			str += Arrays.toString(elems[i]);
+			for (int j = 0; j < n; j++) {
+				str += elems[i][j]+ " ";
+			}
+			//str += Arrays.toString(elems[i]);
 
 			if (i < (m - 1)) {
 				str += sep;
 			}
 		}
 
-		return str + "]";
+		return str + "";
 
 	}
 
