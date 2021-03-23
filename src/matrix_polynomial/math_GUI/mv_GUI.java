@@ -15,51 +15,73 @@ public class mv_GUI implements ActionListener {
 	private JPanel panel;
 
 	private JLabel matrix_A_label;
-	private JTextField matrix_A_dim_text;
-	private JTextField matrix_A_text;
+	private JTextArea matrix_A_dim_text;
+	private JTextArea matrix_A_text;
 	private JLabel matrix_B_label;
-	private JTextField matrix_B_dim_text;
-	private JTextField matrix_B_text;
+	private JTextArea matrix_B_dim_text;
+	private JTextArea matrix_B_text;
 	private JLabel result_label;
 	private JButton button = new JButton();
 
 	public mv_GUI() {
-
+		
 		// the panel with the button and text
 		panel = new JPanel();
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 		panel.setLayout(new GridLayout(0, 1));
+//		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
 		// Matrix A Label
 		matrix_A_label = new JLabel("Matrix A");
-		matrix_A_label.setBounds(10, 20, 80, 25);
-		// Matrix A Dim Textfield
-		matrix_A_dim_text = new JTextField("2 2");
-		matrix_A_dim_text.setBounds(40, 20, 165, 35);
-		// Matrix A Textfield
-		matrix_A_text = new JTextField("1 1 1 1");
-		matrix_A_text.setBounds(100, 20, 65, 35);
+		matrix_A_label.setBackground(Color.CYAN);
+		matrix_A_label.setOpaque(true);
+		matrix_A_label.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 30));
+		// Matrix A Dim Text area
+		matrix_A_dim_text = new JTextArea("2 2");
+		matrix_A_dim_text.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 30));
+		// Matrix A TextArea
+		matrix_A_text = new JTextArea("1 1 \n1 1");
+		matrix_A_text.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 30));
 
 		// Matrix B Label
 		matrix_B_label = new JLabel("Matrix B");
-		matrix_B_label.setBounds(10, 20, 80, 25);
+		matrix_B_label.setBackground(Color.CYAN);
+		matrix_B_label.setOpaque(true);
+		matrix_B_label.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 30));
 		// Matrix B Dim Textfield
-		matrix_B_dim_text = new JTextField("2 2");
-		matrix_B_dim_text.setBounds(40, 20, 65, 35);
+		matrix_B_dim_text = new JTextArea("2 2");
+		matrix_B_dim_text.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 30));
 		// Matrix B Textfield
-		matrix_B_text = new JTextField("2 2 2 2");
-		matrix_B_text.setBounds(100, 20, 165, 35);
-
+		matrix_B_text = new JTextArea("2 2 \n2 2");
+		matrix_B_text.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 30));
+		
+		panel.setPreferredSize(new Dimension(200,350));
+		
 		// result text label
-		result_label = new JLabel("Result will be displayed here");
-		result_label.setBounds(100, 100, 165, 100 );
+		result_label = new JLabel("Result will \n be displayed here");
+		result_label.setBackground(Color.PINK);
+		result_label.setOpaque(true);
 		JPanel resultPanel = new JPanel();
+		resultPanel.setPreferredSize(new Dimension(200,75));
 		
 		// the clickable button
 		button = new JButton("Click Me");
 		button.addActionListener(this);
-		button.setBounds(100, 20, 165, 35);
 
+		
+		//Fixed positions for components: not in use
+//		panel.setLayout(null);
+//		int width = 150;
+//		int l_height = 50; 
+//		int matrix_height = 55;;
+//		matrix_A_label.setBounds(10, 20, width, l_height);		
+//		matrix_A_dim_text.setBounds(40, 80, width, l_height);		
+//		matrix_A_text.setBounds(100, 140, width, matrix_height);		
+//		matrix_B_label.setBounds(10, 200, width, l_height);		
+//		matrix_B_text.setBounds(100, 260, width, matrix_height);
+//		button.setBounds(100, 320, width, l_height);
+//		resultPanel.setBounds(100, 380, width, l_height);
+		
 		panel.add(matrix_A_label);
 		panel.add(matrix_A_dim_text);
 		panel.add(matrix_A_text);
@@ -67,15 +89,15 @@ public class mv_GUI implements ActionListener {
 		panel.add(matrix_B_dim_text);
 		panel.add(matrix_B_text);
 		panel.add(button);
-		//panel.add(result_label);
+		
+		
 		resultPanel.add(result_label);
-		resultPanel.setBackground(Color.PINK);
+		resultPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
 
 		// set up the frame and display it;
 		frame.add(panel, BorderLayout.CENTER);
 		frame.add(resultPanel, BorderLayout.SOUTH);
 		frame.pack();
-//		frame.setSize(500, 500);
 		frame.setTitle("GUI");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
