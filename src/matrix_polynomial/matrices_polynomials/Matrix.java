@@ -22,6 +22,7 @@ public class Matrix {
 		n = elems[0].length;
 	}
 
+	
 	// return sum of this matrix and the other matrix B
 	public Matrix sum(Matrix B) {
 		assert this.is_valid_matrix() : "The input array is not a valid matrix";
