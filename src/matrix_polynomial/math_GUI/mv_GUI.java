@@ -68,7 +68,7 @@ public class mv_GUI implements ActionListener {
 		button = new JButton("Click Me");
 		button.addActionListener(this);
 
-		
+	
 		//Fixed positions for components: not in use
 //		panel.setLayout(null);
 //		int width = 150;
