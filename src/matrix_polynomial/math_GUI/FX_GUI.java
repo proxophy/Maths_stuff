@@ -1,5 +1,8 @@
 package math_GUI;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Scanner;
 
 import javafx.application.Application;
@@ -41,7 +44,7 @@ public class FX_GUI extends Application {
 	}
 
 	@Override
-	public void start(Stage stage) {
+	public void start(Stage stage) throws IOException {
 
 		Label matrix_A_desc = new Label("Matrix A");
 		matrix_A_dim_text = new TextField("2 2");
@@ -87,11 +90,18 @@ public class FX_GUI extends Application {
 		root.addRow(4, display_btn);
 		root.addRow(5, new Label("Operations:"), mult, add, subt, opt_btn);
 		root.add(result_label, 2, 3);
-		root.setHgap(10);  
-		root.setVgap(10); 
-		
-		Scene scene = new Scene(root, 600, 400); // new scene with root
-		scene.getStylesheets().add("path/style.css");  
+		root.setHgap(10);
+		root.setVgap(10);
+
+		Scene scene = new Scene(root); // new scene with root
+		String class_path = FX_GUI.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		String new_path =  class_path.replaceAll("bin", "src/matrix_polynomial/math_GUI" );
+		System.out.println(class_path) ;
+		System.out.println(new_path) ;
+		File f = new File(new_path + "style.css");
+		scene.getStylesheets().clear();
+		scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+
 		stage.setScene(scene);
 		stage.setTitle("Matrix Calculator");
 		stage.show();
@@ -125,7 +135,6 @@ public class FX_GUI extends Application {
 		}
 
 	}
-
 
 	public void disp_btn_action() {
 		create_matrices();

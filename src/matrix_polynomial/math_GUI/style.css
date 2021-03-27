@@ -1,5 +1,15 @@
-    .button {  
-        -fx-font : 14px "serief";  
-        -fx-padding : 10;  
-        -fx-background-color : #CCFF99;  
-    }   
+.root{
+	-fx-background-color : #FFCCFF;  
+	-fx-padding : 10pt;
+}
+
+.scene {
+	/*-fx-width : 300pt;
+	-fx-height : 500pt; */
+}
+
+.button {  
+	/*-fx-width : 30pt;
+	-fx-height : 30pt; */
+	-fx-background-color : #CCFFFF;  
+} 
