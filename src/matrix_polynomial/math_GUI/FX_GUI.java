@@ -203,19 +203,3 @@ public class FX_GUI extends Application {
 	}
 }
 
-// old code
-//mult_btn = new Button("Multiply");
-//mult_btn.setOnAction(new EventHandler<ActionEvent>() {
-//	@Override
-//	public void handle(ActionEvent arg0) {
-//		mult_btn_action();
-//	}
-//});
-//
-//add_btn = new Button("Add");
-//add_btn.setOnAction(new EventHandler<ActionEvent>() {
-//	@Override
-//	public void handle(ActionEvent arg0) {
-//		add_btn_action();
-//	}
-//});
