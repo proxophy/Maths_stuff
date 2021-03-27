@@ -1,13 +1,6 @@
 package math_GUI;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.util.Arrays;
 import java.util.Scanner;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -15,24 +8,33 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import matrices_polynomials.Matrix;
 
 public class FX_GUI extends Application {
-	Label matrix_A_label;
 	TextField matrix_A_dim_text;
 	TextField matrix_A_text;
-	Label matrix_B_label;
 	TextField matrix_B_dim_text;
 	TextField matrix_B_text;
-	Label result_label;
-	Button btn1;
-	Button btn2;
-	
+	Label matrix_A_label;
+	Label matrix_B_label;
 	Matrix A;
 	Matrix B;
+
+	Label result_label;
+
+	ToggleGroup group;
+	RadioButton mult;
+	RadioButton add;
+	RadioButton subt;
+
+	Button opt_btn;
+	Button display_btn;
 
 	public void init() {
 
@@ -41,43 +43,57 @@ public class FX_GUI extends Application {
 	@Override
 	public void start(Stage stage) {
 
-		matrix_A_label = new Label("Matrix A");
+		Label matrix_A_desc = new Label("Matrix A");
 		matrix_A_dim_text = new TextField("2 2");
 		matrix_A_text = new TextField("1 1 \n1 1");
 
-		matrix_B_label = new Label("Matrix B");
+		Label matrix_B_desc = new Label("Matrix B");
 		matrix_B_dim_text = new TextField("2 2");
 		matrix_B_text = new TextField("2 2 \n2 2");
 
-		result_label = new Label("Result will be displayed here");
+		matrix_A_label = new Label("A will be displayed here");
+		matrix_B_label = new Label("B will be displayed here");
+		result_label = new Label("");
+		matrix_A_label.setMinHeight(50);
 
-		btn1 = new Button("Multiply");
-		btn1.setOnAction(new EventHandler<ActionEvent>() {
+		group = new ToggleGroup();
+		mult = new RadioButton("Multiply");
+		add = new RadioButton("Add");
+		subt = new RadioButton("Subtract");
+		mult.setToggleGroup(group);
+		add.setToggleGroup(group);
+		subt.setToggleGroup(group);
+
+		opt_btn = new Button("Choose");
+		opt_btn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				bt1_action();
+				binary_function();
 			}
 		});
-		
-		btn2 = new Button("Multiply");
-		btn2.setOnAction(new EventHandler<ActionEvent>() {
+
+		display_btn = new Button("Display");
+		display_btn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				bt2_action();
+				disp_btn_action();
 			}
 		});
 
 		GridPane root = new GridPane(); // layout
 
-		root.addColumn(0, matrix_A_label, matrix_A_dim_text, matrix_A_text);
-		root.addColumn(1, matrix_B_label, matrix_B_dim_text, matrix_B_text);
-		root.add(btn1, 2, 1);
+		root.addColumn(0, matrix_A_desc, matrix_A_dim_text, matrix_A_text, matrix_A_label);
+		root.addColumn(1, matrix_B_desc, matrix_B_dim_text, matrix_B_text, matrix_B_label);
+		root.addRow(4, display_btn);
+		root.addRow(5, new Label("Operations:"), mult, add, subt, opt_btn);
 		root.add(result_label, 2, 3);
-
+		root.setHgap(10);  
+		root.setVgap(10); 
+		
 		Scene scene = new Scene(root, 600, 400); // new scene with root
-
+		scene.getStylesheets().add("path/style.css");  
 		stage.setScene(scene);
-		stage.setTitle("First JavaFX Application");
+		stage.setTitle("Matrix Calculator");
 		stage.show();
 	}
 
@@ -85,9 +101,48 @@ public class FX_GUI extends Application {
 
 	}
 
-	public void bt1_action() {
-		System.out.println(matrix_A_text.getText());
+	public void binary_function() {
+		disp_btn_action();
+		if (A != null && B != null) {
+			Matrix result = null;
+			if (mult.isSelected()) {
+				result = A.product(B);
+			} else if (add.isSelected()) {
+				result = A.sum(B);
+			} else if (subt.isSelected()) {
+				result = A.difference(B);
+			} else {
+				result_label.setText("Choose (valid) operation");
+				return;
+			}
+			if (result != null) {
+				result_label.setText(result.toString());
+			} else {
+				result_label.setText("Dimensions are not fitting");
+			}
+		} else {
+			result_label.setText("One of the matrices is null");
+		}
 
+	}
+
+
+	public void disp_btn_action() {
+		create_matrices();
+		if (A != null && B != null) {
+			matrix_A_label.setText(A.toString());
+			matrix_B_label.setText(B.toString());
+		} else if (A == null) {
+			matrix_A_label.setText("Error: Check dimension \nor entries of matrix A");
+			matrix_B_label.setText(B.toString());
+		} else if (B == null) {
+			matrix_A_label.setText(A.toString());
+			matrix_B_label.setText("Error: Check dimension \nor entries of matrix B");
+		}
+
+	}
+
+	public void create_matrices() {
 		Scanner a_dim_scanner = new Scanner(matrix_A_dim_text.getText());
 		Scanner b_dim_scanner = new Scanner(matrix_B_dim_text.getText());
 		Scanner a_scanner = new Scanner(matrix_A_text.getText());
@@ -96,8 +151,6 @@ public class FX_GUI extends Application {
 		// read matrix A
 		int[] dimA = new int[2];
 		double[][] elementsA = null;
-		Matrix A;
-		String resultA;
 		try {
 			dimA[0] = a_dim_scanner.nextInt();
 			dimA[1] = a_dim_scanner.nextInt();
@@ -108,17 +161,15 @@ public class FX_GUI extends Application {
 				}
 			}
 			A = new Matrix(elementsA);
-			resultA = A.toString();
 
 		} catch (Exception ex) {
-			result_label.setText("Matrix A: Exception occured " + Arrays.toString(elementsA));
-			return;
+			matrix_A_label.setText("Error: Check dimension \n or entries of matrix A");
+			A = null;
 		}
 
+		// Read matrix B
 		int[] dimB = new int[2];
 		double[][] elementsB = null;
-		Matrix B;
-		String resultB;
 		try {
 			dimB[0] = b_dim_scanner.nextInt();
 			dimB[1] = b_dim_scanner.nextInt();
@@ -130,24 +181,32 @@ public class FX_GUI extends Application {
 				}
 			}
 			B = new Matrix(elementsB);
-			resultB = B.toString();
 
 		} catch (Exception ex) {
-			result_label.setText("Matrix B: Exception occured " + Arrays.toString(elementsB));
-			return;
+			matrix_B_label.setText("Error: Check dimension \n or entries of matrix B");
+			B = null;
 		}
 
-		Matrix AB = A.product(B);
-		result_label.setText(AB.toString());
-
 	}
 
-	public void bt2_action() {
-		
-	}
-	
-	
 	public static void main(String[] args) {
 		launch();
 	}
 }
+
+// old code
+//mult_btn = new Button("Multiply");
+//mult_btn.setOnAction(new EventHandler<ActionEvent>() {
+//	@Override
+//	public void handle(ActionEvent arg0) {
+//		mult_btn_action();
+//	}
+//});
+//
+//add_btn = new Button("Add");
+//add_btn.setOnAction(new EventHandler<ActionEvent>() {
+//	@Override
+//	public void handle(ActionEvent arg0) {
+//		add_btn_action();
+//	}
+//});
