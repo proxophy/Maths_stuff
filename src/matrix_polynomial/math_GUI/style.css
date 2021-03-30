@@ -1,11 +1,12 @@
 .root{
-	-fx-background-color : #FFCCFF;  
+
+	-fx-background-color : #EFEFEF;  
 	-fx-padding : 10pt;
 }
 
 .scene {
-	/*-fx-width : 300pt;
-	-fx-height : 500pt; */
+	-fx-width : 300pt;
+	-fx-height : 500pt; 
 }
 
 .button {  

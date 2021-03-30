@@ -1,3 +1,5 @@
+// Swing GUI, not up to date
+
 package math_GUI;
 
 import javax.swing.*;
@@ -7,7 +9,6 @@ import matrices_polynomials.Matrix;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class mv_GUI implements ActionListener {

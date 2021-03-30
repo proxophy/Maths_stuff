@@ -1,50 +1,47 @@
 package math_GUI;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Scanner;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import matrices_polynomials.Matrix;
 
 public class FX_GUI extends Application {
-	TextField matrix_A_dim_text;
-	TextField matrix_A_text;
-	TextField matrix_B_dim_text;
-	TextField matrix_B_text;
-	Label matrix_A_label;
-	Label matrix_B_label;
-	Matrix A;
-	Matrix B;
+	private TextField matrix_A_dim_text;
+	private TextField matrix_A_text;
+	private TextField matrix_B_dim_text;
+	private TextField matrix_B_text;
+	private Label matrix_A_label;
+	private Label matrix_B_label;
+	private Matrix A;
+	private Matrix B;
 
-	Label result_label;
+	private Label result_label;
 
-	ToggleGroup group;
-	RadioButton mult;
-	RadioButton add;
-	RadioButton subt;
+	private ToggleGroup group;
+	private RadioButton mult;
+	private RadioButton add;
+	private RadioButton subt;
 
-	Button opt_btn;
-	Button display_btn;
+	private Button display_btn;
 
-	public void init() {
 
-	}
-
-	@Override
-	public void start(Stage stage) throws IOException {
+	private void initUI(Stage stage) {
 
 		Label matrix_A_desc = new Label("Matrix A");
 		matrix_A_dim_text = new TextField("2 2");
@@ -67,11 +64,12 @@ public class FX_GUI extends Application {
 		add.setToggleGroup(group);
 		subt.setToggleGroup(group);
 
-		opt_btn = new Button("Choose");
-		opt_btn.setOnAction(new EventHandler<ActionEvent>() {
+		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
-			public void handle(ActionEvent arg0) {
-				binary_function();
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+				if (group.getSelectedToggle() != null) {
+					binary_function();
+				}
 			}
 		});
 
@@ -83,35 +81,58 @@ public class FX_GUI extends Application {
 			}
 		});
 
-		GridPane root = new GridPane(); // layout
+		// Grid layout pane
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.addColumn(0, matrix_A_desc, matrix_A_dim_text, matrix_A_text, matrix_A_label);
+		grid.addColumn(1, matrix_B_desc, matrix_B_dim_text, matrix_B_text, matrix_B_label);
+		grid.addRow(4, display_btn);
+		grid.addRow(5, new Label("Operations:"), mult, add, subt);
+		grid.add(result_label, 2, 3);
 
-		root.addColumn(0, matrix_A_desc, matrix_A_dim_text, matrix_A_text, matrix_A_label);
-		root.addColumn(1, matrix_B_desc, matrix_B_dim_text, matrix_B_text, matrix_B_label);
-		root.addRow(4, display_btn);
-		root.addRow(5, new Label("Operations:"), mult, add, subt, opt_btn);
-		root.add(result_label, 2, 3);
-		root.setHgap(10);
-		root.setVgap(10);
+		// canvas pane
+		Pane canvas_pane = new Pane();
+		Canvas canvas = new Canvas(500, 300);
+		GraphicsContext context = canvas.getGraphicsContext2D();
+		drawLines(context);
+		canvas_pane.getChildren().add(canvas);
 
-		Scene scene = new Scene(root); // new scene with root
+		// organize different layout panes
+		VBox root = new VBox();
+		root.getChildren().addAll(grid, canvas_pane);
+
+		// create scene
+		Scene scene = new Scene(root); // new scene with grid_layout
+
+		// add css file
 		String class_path = FX_GUI.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		String new_path =  class_path.replaceAll("bin", "src/matrix_polynomial/math_GUI" );
-		System.out.println(class_path) ;
-		System.out.println(new_path) ;
+		String new_path = class_path.replaceAll("bin", "src/matrix_polynomial/math_GUI");
 		File f = new File(new_path + "style.css");
 		scene.getStylesheets().clear();
 		scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
 
+		// set stage
 		stage.setScene(scene);
 		stage.setTitle("Matrix Calculator");
 		stage.show();
 	}
-
-	public void stop() {
-
+	
+	@Override
+	public void start(Stage stage) {
+		initUI(stage);
 	}
 
-	public void binary_function() {
+	private void drawLines(GraphicsContext gc) {
+		gc.beginPath();
+		gc.moveTo(30.5, 30.5);
+		gc.lineTo(150.5, 30.5);
+		gc.lineTo(150.5, 150.5);
+		gc.lineTo(30.5, 30.5);
+		gc.stroke();
+	}
+
+	private void binary_function() {
 		disp_btn_action();
 		if (A != null && B != null) {
 			Matrix result = null;
@@ -136,7 +157,7 @@ public class FX_GUI extends Application {
 
 	}
 
-	public void disp_btn_action() {
+	private void disp_btn_action() {
 		create_matrices();
 		if (A != null && B != null) {
 			matrix_A_label.setText(A.toString());
@@ -151,7 +172,7 @@ public class FX_GUI extends Application {
 
 	}
 
-	public void create_matrices() {
+	private void create_matrices() {
 		Scanner a_dim_scanner = new Scanner(matrix_A_dim_text.getText());
 		Scanner b_dim_scanner = new Scanner(matrix_B_dim_text.getText());
 		Scanner a_scanner = new Scanner(matrix_A_text.getText());
@@ -195,6 +216,10 @@ public class FX_GUI extends Application {
 			matrix_B_label.setText("Error: Check dimension \n or entries of matrix B");
 			B = null;
 		}
+		a_dim_scanner.close();
+		b_dim_scanner.close();
+		a_scanner.close();
+		b_scanner.close();
 
 	}
 
@@ -202,4 +227,3 @@ public class FX_GUI extends Application {
 		launch();
 	}
 }
-
