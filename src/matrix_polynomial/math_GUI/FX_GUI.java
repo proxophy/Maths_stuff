@@ -8,9 +8,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -18,28 +22,34 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import matrices_polynomials.Matrix;
 
 public class FX_GUI extends Application {
+	// Calculator Elements
 	private TextField matrix_A_dim_text;
 	private TextField matrix_A_text;
 	private TextField matrix_B_dim_text;
 	private TextField matrix_B_text;
 	private Label matrix_A_label;
 	private Label matrix_B_label;
-	private Matrix A;
-	private Matrix B;
-
 	private Label result_label;
-
 	private ToggleGroup group;
 	private RadioButton mult;
 	private RadioButton add;
 	private RadioButton subt;
-
 	private Button display_btn;
 
+	private Matrix A;
+	private Matrix B;
+
+	// panes
+	private VBox root;
+	private GridPane grid;
+	private Pane canvas_pane;
 
 	private void initUI(Stage stage) {
 
@@ -82,7 +92,7 @@ public class FX_GUI extends Application {
 		});
 
 		// Grid layout pane
-		GridPane grid = new GridPane();
+		grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.addColumn(0, matrix_A_desc, matrix_A_dim_text, matrix_A_text, matrix_A_label);
@@ -92,24 +102,22 @@ public class FX_GUI extends Application {
 		grid.add(result_label, 2, 3);
 
 		// canvas pane
-		Pane canvas_pane = new Pane();
-		Canvas canvas = new Canvas(500, 300);
-		GraphicsContext context = canvas.getGraphicsContext2D();
-		drawLines(context);
-		canvas_pane.getChildren().add(canvas);
+		canvas_pane = new StackPane();
+		canvas_pane.setId("canvas_pane");
+		drawOnCanvas();
 
 		// organize different layout panes
-		VBox root = new VBox();
-		root.getChildren().addAll(grid, canvas_pane);
+		root = new VBox(grid, canvas_pane);
+		root.setSpacing(10);
 
 		// create scene
-		Scene scene = new Scene(root); // new scene with grid_layout
+		Scene scene = new Scene(root);
 
 		// add css file
 		String class_path = FX_GUI.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		String new_path = class_path.replaceAll("bin", "src/matrix_polynomial/math_GUI");
 		File f = new File(new_path + "style.css");
-		scene.getStylesheets().clear();
+//		scene.getStylesheets().clear();
 		scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
 
 		// set stage
@@ -117,19 +125,25 @@ public class FX_GUI extends Application {
 		stage.setTitle("Matrix Calculator");
 		stage.show();
 	}
-	
+
 	@Override
 	public void start(Stage stage) {
 		initUI(stage);
 	}
 
-	private void drawLines(GraphicsContext gc) {
-		gc.beginPath();
-		gc.moveTo(30.5, 30.5);
-		gc.lineTo(150.5, 30.5);
-		gc.lineTo(150.5, 150.5);
-		gc.lineTo(30.5, 30.5);
-		gc.stroke();
+	private void drawOnCanvas() {
+		int chartWidth = 500;
+		int chartHeight = 500;
+		double minX = -8;
+		double maxX = 8;
+		double xTickUnit = 1;
+		double minY = -8;
+		double maxY = 8;
+		double yTickUnit = 1;
+
+		CartesianPane cartPane = new CartesianPane(chartWidth, chartHeight, minX, maxX, xTickUnit, minY, maxY, yTickUnit);
+		canvas_pane.getChildren().add(cartPane);
+
 	}
 
 	private void binary_function() {

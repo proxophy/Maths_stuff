@@ -3,6 +3,12 @@
 	-fx-background-color : #EFEFEF;  
 	-fx-padding : 10pt;
 }
+#canvas_pane{
+	-fx-background-color :#FFFFFF;  
+	/*-fx-background-color:  #FF00FF;*/
+}
+
+
 
 .scene {
 	-fx-width : 300pt;
