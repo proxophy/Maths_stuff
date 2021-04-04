@@ -18,8 +18,8 @@ public class Polynomial {
 		Polynomial i = new Polynomial(new double[] { 6.0, 0.0, 1.0 });
 		Polynomial j = new Polynomial(new double[] { -64.0, 0.0, 4.0 });
 		Polynomial k = new Polynomial(new double[] { 6.0, 8.0, 2.0 });
-		Polynomial l = new Polynomial(new double[] {0.0, 0.0, 0.0, 0.0, 1.0});
-		//System.out.println(i.tangent(0));
+		Polynomial l = new Polynomial(new double[] { 0.0, 0.0, 0.0, 0.0, 1.0 });
+		// System.out.println(i.tangent(0));
 		System.out.println(h);
 		System.out.println(l);
 		// System.out.println(j.real_roots());
@@ -35,7 +35,7 @@ public class Polynomial {
 		}
 	}
 
-	public double evaluate(double x) {
+	private double evaluate(double x) {
 		double val = 0;
 		for (int i = 0; i <= deg; i++) {
 			val += coeffs[i] * Math.pow(x, i);
@@ -43,8 +43,12 @@ public class Polynomial {
 		return val;
 	}
 
+	public double get_evaluated(double x) {
+		return evaluate(x);
+	}
+
 	// returns sum of this polynomial and another
-	public Polynomial pol_add(Polynomial B) {
+	private Polynomial pol_add(Polynomial B) {
 		if (B == null)
 			return this;
 
@@ -64,7 +68,7 @@ public class Polynomial {
 	}
 
 	// adds to this polynomial another polynomial
-	public void addto(Polynomial B) {
+	protected void addto(Polynomial B) {
 		Polynomial new_poly = this.pol_add(B);
 		if (new_poly != null) {
 			this.coeffs = new_poly.coeffs;
@@ -73,8 +77,12 @@ public class Polynomial {
 
 	}
 
+	public Polynomial get_pol_add(Polynomial B) {
+		return pol_add(B);
+	}
+
 	// return product of polynomial
-	public Polynomial pol_mult(Polynomial B) {
+	private Polynomial pol_mult(Polynomial B) {
 		if (B == null)
 			return this;
 		int new_deg = this.deg + B.deg;
@@ -90,7 +98,7 @@ public class Polynomial {
 	}
 
 	// multiplies this polynomial by another one
-	public void multwith(Polynomial B) {
+	protected void multwith(Polynomial B) {
 		Polynomial new_poly = this.pol_mult(B);
 		if (new_poly != null) {
 			this.coeffs = new_poly.coeffs;
@@ -99,17 +107,25 @@ public class Polynomial {
 
 	}
 
+	public Polynomial get_pol_mult(Polynomial B) {
+		return pol_mult(B);
+	}
+
 	// returns the derivative
-	public Polynomial derivative() {
+	private Polynomial derivative() {
 		double[][] ce_2d = new double[][] { this.coeffs };
-		Matrix pol_matrix = (new Matrix(ce_2d)).transposed_matrix(); // Vector of polynomial
-		Matrix der_matrix = der_matrix().product(pol_matrix); // Matrix of derivative
-		double[] der_coeff = der_matrix.transposed_matrix().elems[0];
+		Matrix pol_matrix = (new Matrix(ce_2d)).getTransposed(); // Vector of polynomial
+		Matrix der_matrix = der_matrix().getProduct(pol_matrix); // Matrix of derivative
+		double[] der_coeff = der_matrix.getTransposed().elems[0];
 		return new Polynomial(der_coeff);
 	}
 
+	public Polynomial getDerivatve() {
+		return derivative();
+	}
+	
 	// Matrix for derivating polynomial
-	public Matrix der_matrix() {
+	private Matrix der_matrix() {
 		double[][] elems = new double[deg][deg + 1];
 		for (int i = 1; i <= deg; i++) {
 			elems[i - 1][i] = i;
@@ -117,7 +133,7 @@ public class Polynomial {
 		return new Matrix(elems);
 	}
 
-	public Polynomial tangent(double x) {
+	private Polynomial tangent(double x) {
 		if (deg <= 1) {
 			return this;
 		}
@@ -133,9 +149,13 @@ public class Polynomial {
 
 		return new Polynomial(tang);
 	}
+	
+	public Polynomial getTangent(double x) {
+		return tangent(x);
+	}
 
-	//TODO
-	public HashSet<Double> real_roots() {
+	// TODO
+	private HashSet<Double> real_roots() {
 		HashSet<Double> roots = new HashSet<Double>();
 		if (deg == 0) {
 			return null;
@@ -173,6 +193,10 @@ public class Polynomial {
 		return roots;
 	}
 
+	
+	public HashSet<Double> getRealRoots() {
+		return real_roots();
+	}
 	@Override
 	public boolean equals(Object o) {
 		if (o == this) {
@@ -189,9 +213,9 @@ public class Polynomial {
 
 	@Override
 	public String toString() {
-		String str ="";
+		String str = "";
 		boolean first = false;
-		
+
 		if (!(coeffs[0] == 0 && deg > 0)) {
 			str += coeffs[0];
 			first = true;
@@ -202,12 +226,12 @@ public class Polynomial {
 				str += " + ";
 			}
 			if (i == 1 && coeffs[i] != 0.0) {
-				str +=  coeffs[i] + "*x";
-			}  else if (coeffs[i] != 0.0) {
-				str +=  coeffs[i] + "*x^" + i;
+				str += coeffs[i] + "*x";
+			} else if (coeffs[i] != 0.0) {
+				str += coeffs[i] + "*x^" + i;
 			}
 			if (!first && coeffs[i] != 0) {
-				first =true;
+				first = true;
 			}
 		}
 

@@ -13,7 +13,7 @@ public class Basics {
 		double[][] Rr = { { 2.0, 5.0, 1.0 }, { 0.0, 7.0, 4.0 }, { 0.0, 0.0, -1.0 } };
 
 
-		System.out.println(identity(3).difference(new Matrix(Dd)));
+		System.out.println(identity(3).getDifference(new Matrix(Dd)));
 		
 		System.out.println("changed");
 		/*
@@ -28,7 +28,7 @@ public class Basics {
 
 	}
 
-	public static Quad_Matrix identity(int dim) {
+	private static Quad_Matrix identity(int dim) {
 		double[][] elems = new double[dim][dim];
 		for (int i = 0; i < dim; i++) {
 			elems[i][i] = 1;
@@ -36,7 +36,7 @@ public class Basics {
 		return new Quad_Matrix(elems);
 	}
 	
-	public static double[][] int_to_double(int[][] M) {
+	private static double[][] int_to_double(int[][] M) {
 		if (M == null) {
 			return null;
 		}

@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class Vector extends Matrix implements Comparable<Vector> {
+	private int dim;
+	private double[] elems_1d;
+	
 	public static void main(String[] args) {
 		Vector v = new Vector(new double[][] { { 6.0 }, { 2.5 } });
 		Vector q = new Vector(new double[][] { { 6.0 }, { 3 } });
@@ -18,13 +21,17 @@ public class Vector extends Matrix implements Comparable<Vector> {
 		System.out.println(vectors);
 		
 		Vector w = new Vector(new double[][] { { 3.0 }, { 12.0 }, { 4.0 } });
-		System.out.println("hmm " + v.two_norm());
-		System.out.println("hmm " + w.two_norm());
+		
 	}
 
 	public Vector(double[][] elements) {
 		super(elements);
 		assert this.is_vector();
+		this.dim = this.elems.length;
+		elems_1d = new double[this.m];
+		for (int i = 0; i < elements.length; i++) {
+			elems_1d[i] = elements[i][0];
+		}
 	}
 
 	public Vector(double[] elements) {
@@ -32,23 +39,36 @@ public class Vector extends Matrix implements Comparable<Vector> {
 		for (int i = 0; i < elements.length; i++) {
 			elems[i][0] = elements[i];
 		}
-
+		this.elems_1d = elements;
+		this.dim = this.elems.length;
 	}
 
-	public double dot_product(Vector w) {
+	private double dot_product(Vector w) {
 
 		if (w.m != this.m) {
 			throw new IllegalArgumentException();
 		}
-		Matrix vt = this.transposed_matrix();
-		return vt.product(w).elems[0][0];
+		Matrix vt = this.getTransposed();
+		return vt.getProduct(w).elems[0][0];
 
 	}
 
-	public double two_norm() {
+	private double two_norm() {
 		return Math.sqrt(dot_product(this));
 	}
+	
+	public double getTwoNorm(){
+		return two_norm();
+	}
+	
+	public double getDotProduct (Vector w) {
+		return dot_product(w);
+	}
 
+	public int getDim() {
+		return dim;
+	}
+	
 	@Override
 	public int compareTo(Vector arg0) {
 		

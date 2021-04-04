@@ -10,23 +10,22 @@ public class Matrix {
 	public static void main(String[] args) {
 		double[][] test = new double[][] { { 6.0 }, { 2.5 } };
 		Vector v = new Vector(new double[][] { { 6.0 }, { 2.5 } });
-		Matrix w = (new Vector(new double[][] { { 6.0 }, { 2.5 } })).transposed_matrix();
+		Matrix w = (new Vector(new double[][] { { 6.0 }, { 2.5 } })).getTransposed();
 		System.out.println(v.equals(new Vector(test)));
 		System.out.println(v);
 	}
 
 	public Matrix(double[][] elements) {
 		this.elems = elements;
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
+		assert this.valid_matrix() : "The input array is not a valid matrix";
 		m = elems.length;
 		n = elems[0].length;
 	}
 
-	
 	// return sum of this matrix and the other matrix B
-	public Matrix sum(Matrix B) {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
-		assert B.is_valid_matrix() : "The input array is not a valid matrix";
+	private Matrix sum(Matrix B) {
+		assert this.valid_matrix() : "The input array is not a valid matrix";
+		assert B.valid_matrix() : "The input array is not a valid matrix";
 		if (this.m != B.m || this.n != B.n)
 			return null;
 
@@ -40,7 +39,7 @@ public class Matrix {
 		return new Matrix(sum);
 	}
 
-	public void add(Matrix B) {
+	protected void add(Matrix B) {
 		if (B != null) {
 			Matrix new_m = sum(B);
 			this.elems = new_m.elems;
@@ -50,9 +49,13 @@ public class Matrix {
 
 	}
 
-	public Matrix difference(Matrix B) {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
-		assert B.is_valid_matrix() : "The input array is not a valid matrix";
+	public Matrix getSum(Matrix B) {
+		return sum(B);
+	}
+
+	private Matrix difference(Matrix B) {
+		assert this.valid_matrix() : "The input array is not a valid matrix";
+		assert B.valid_matrix() : "The input array is not a valid matrix";
 		if (this.m != B.m || this.n != B.n)
 			return null;
 
@@ -66,7 +69,7 @@ public class Matrix {
 		return new Matrix(sum);
 	}
 
-	public void subtract(Matrix B) {
+	protected void subtract(Matrix B) {
 		if (B != null) {
 			Matrix new_m = difference(B);
 			this.elems = new_m.elems;
@@ -75,10 +78,14 @@ public class Matrix {
 		}
 	}
 
-	public Matrix product(Matrix B) {
+	public Matrix getDifference(Matrix B) {
+		return difference(B);
+	}
 
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
-		assert B.is_valid_matrix() : "The input array is not a valid matrix";
+	private Matrix product(Matrix B) {
+
+		assert this.valid_matrix() : "The input array is not a valid matrix";
+		assert B.valid_matrix() : "The input array is not a valid matrix";
 
 		double[][] B_elems = B.elems;
 		int o, p;
@@ -108,7 +115,7 @@ public class Matrix {
 		return new Matrix(product);
 	}
 
-	public void multipy(Matrix B) {
+	protected void multipy(Matrix B) {
 		if (B != null) {
 			Matrix new_m = product(B);
 			this.elems = new_m.elems;
@@ -118,8 +125,12 @@ public class Matrix {
 
 	}
 
-	public Matrix transposed_matrix() {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
+	public Matrix getProduct(Matrix B) {
+		return product(B);
+	}
+
+	private Matrix transposed_matrix() {
+		assert this.valid_matrix() : "The input array is not a valid matrix";
 
 		double[][] MT = new double[n][m];
 		for (int i = 0; i < m; i++) {
@@ -130,7 +141,7 @@ public class Matrix {
 		return new Matrix(MT);
 	}
 
-	public void transpose() {
+	protected void transpose() {
 		Matrix new_m = transposed_matrix();
 		this.elems = new_m.elems;
 		this.m = new_m.m;
@@ -138,8 +149,12 @@ public class Matrix {
 
 	}
 
-	public Matrix sub_matrix(int y, int x) {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
+	public Matrix getTransposed() {
+		return transposed_matrix();
+	}
+
+	protected Matrix sub_matrix(int y, int x) {
+		assert this.valid_matrix() : "The input array is not a valid matrix";
 
 		double[][] sub = new double[m - 1][n - 1];
 
@@ -164,7 +179,11 @@ public class Matrix {
 		return new Matrix(sub);
 	}
 
-	public boolean is_valid_matrix() {
+	public Matrix get_sub_matrix(int y, int x) {
+		return sub_matrix(y, x);
+	}
+
+	private boolean valid_matrix() {
 		if (elems == null || elems[0] == null || elems[0].length == 0) {
 			return false;
 		}
@@ -179,14 +198,25 @@ public class Matrix {
 		return true;
 	}
 
-	public boolean is_quadratic() {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
+	private boolean quadratic() {
+		assert this.valid_matrix() : "The input array is not a valid matrix";
 		return m == n;
 	}
 
-	public boolean is_vector() {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
+	private boolean vector() {
+		assert this.valid_matrix() : "The input array is not a valid matrix";
 		return n == 1;
+	}
+
+	public boolean is_valid() {
+		return valid_matrix();
+	}
+	
+	public boolean is_quadratic() {
+		return quadratic();
+	}
+	public boolean is_vector() {
+		return vector();
 	}
 
 	@Override
@@ -199,9 +229,9 @@ public class Matrix {
 
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) {
-				str += elems[i][j]+ " ";
+				str += elems[i][j] + " ";
 			}
-			//str += Arrays.toString(elems[i]);
+			// str += Arrays.toString(elems[i]);
 
 			if (i < (m - 1)) {
 				str += sep;

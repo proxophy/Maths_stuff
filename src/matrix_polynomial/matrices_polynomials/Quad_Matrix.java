@@ -1,7 +1,7 @@
 package matrices_polynomials;
 
 public class Quad_Matrix extends Matrix {
-	int dim;
+	private int dim;
 
 	public static void main(String[] args) {
 		double[][] Bb = { { 1.0, 3.0, 2.0 }, { 1.0, -4.0, 2.0 }, { 3.0, 0.0, 3.0 } };
@@ -18,8 +18,8 @@ public class Quad_Matrix extends Matrix {
 		dim = elems.length;
 	}
 
-	public double determinant() {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
+	private double determinant() {
+		assert this.is_valid() : "The input array is not a valid matrix";
 		double det = 0.0;
 
 		if (elems.length == 2) {
@@ -36,15 +36,19 @@ public class Quad_Matrix extends Matrix {
 		return det;
 	}
 
+	public double getDeterminant() {
+		return determinant();
+	}
+
 	@Override
 	public Quad_Matrix sub_matrix(int y, int x) {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
+		assert this.is_valid() : "The input array is not a valid matrix";
 		Matrix old = super.sub_matrix(y, x);
 		return new Quad_Matrix(old.elems);
 	}
 
-	public boolean is_right_triangular() {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
+	private boolean right_triangular() {
+		assert this.is_valid() : "The input array is not a valid matrix";
 		for (int i = 1; i < elems.length; i++) {
 			for (int j = 0; j < i; j++) {
 				if (elems[i][j] != 0) {
@@ -56,8 +60,12 @@ public class Quad_Matrix extends Matrix {
 		return true;
 	}
 
-	public boolean is_left_triangular() {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
+	public boolean is_right_triangular() {
+		return right_triangular();
+	}
+
+	private boolean left_triangular() {
+		assert this.is_valid() : "The input array is not a valid matrix";
 		for (int i = 1; i < elems.length; i++) {
 			for (int j = 0; j < i; j++) {
 				if (elems[j][i] != 0) {
@@ -69,8 +77,12 @@ public class Quad_Matrix extends Matrix {
 		return true;
 	}
 
-	public boolean is_symmetric() {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
+	public boolean is_left_triangular() {
+		return left_triangular();
+	}
+
+	private boolean symmetric() {
+		assert this.is_valid() : "The input array is not a valid matrix";
 		for (int i = 0; i < elems.length; i++) {
 			for (int j = i; j < elems.length; j++) {
 				if (elems[i][j] != elems[j][i]) {
@@ -82,8 +94,12 @@ public class Quad_Matrix extends Matrix {
 		return true;
 	}
 
-	public boolean is_asymmetric() {
-		assert this.is_valid_matrix() : "The input array is not a valid matrix";
+	public boolean is_symmetric() {
+		return symmetric();
+	}
+
+	private boolean asymmetric() {
+		assert this.is_valid() : "The input array is not a valid matrix";
 
 		for (int i = 0; i < elems.length; i++) {
 			if (elems[i][i] != 0) {
@@ -99,8 +115,12 @@ public class Quad_Matrix extends Matrix {
 		return true;
 	}
 
+	public boolean is_asymmetric() {
+		return asymmetric();
+	}
+
 	// To-Do
-	public Matrix inverse() {
+	private Matrix inverse() {
 		if (dim > 10) {
 			throw new IllegalArgumentException("can't compute inverse for n>10");
 		} else if (this.determinant() == 0.0) {
@@ -121,5 +141,9 @@ public class Quad_Matrix extends Matrix {
 		}
 
 		return new Matrix(aug_mat);
+	}
+
+	public Matrix getInverse() {
+		return inverse();
 	}
 }
