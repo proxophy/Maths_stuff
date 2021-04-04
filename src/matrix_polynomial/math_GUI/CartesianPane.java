@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import matrices_polynomials.Vector;
 
 public class CartesianPane extends Pane {
 	private NumberAxis xAxis;
@@ -25,6 +26,9 @@ public class CartesianPane extends Pane {
 	private double yTickUnit;
 	private double yUnitW;
 
+	private Canvas canvas;
+	private GraphicsContext gc;
+
 	public CartesianPane(double chartWidth, double chartHeight, double minX, double maxX, double xTickUnit, double minY,
 			double maxY, double yTickUnit) {
 		this.chartWidth = chartWidth;
@@ -36,28 +40,39 @@ public class CartesianPane extends Pane {
 		this.minY = minY;
 		this.maxY = maxY;
 		this.yTickUnit = yTickUnit;
-		this.yUnitW = this.chartHeight/ (maxY - minY);
+		this.yUnitW = this.chartHeight / (maxY - minY);
 
 		Axes axes = new Axes();
+		canvas = new Canvas(chartWidth, chartHeight);
+		gc = canvas.getGraphicsContext2D();
 		
-		this.getChildren().setAll(axes);
-		draw();
+
+		this.getChildren().addAll(axes, canvas);
+
 	}
 
 	private void draw() {
-		Canvas canvas = new Canvas(chartWidth, chartHeight);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
+		gc.setLineWidth(5.0);
+		gc.setStroke(Color.RED);
+		gc.strokeLine(chartWidth / 2.0, chartHeight / 2.0, chartWidth / 2.0 + 3 * xUnitW,
+				chartHeight / 2.0 - yUnitW * 7.0);
+
+	}
+
+	public void drawVector(Vector v) {
+		double xco = v.get_elems_1d()[0];
+		double yco = v.get_elems_1d()[1];
+
+		if (v.getDim() != 2 || yco < minY || yco > maxY  || xco < minX || xco > maxX) {
+			return;
+		}
 
 		gc.setLineWidth(5.0);
 		gc.setStroke(Color.RED);
-		gc.strokeLine(chartWidth/2.0, chartHeight/2.0, chartWidth/2.0  + 3 * xUnitW , chartHeight/2.0  - yUnitW*7.0);
-	
-		
-		this.getChildren().add(canvas);
+		gc.strokeLine(chartWidth / 2.0, chartHeight / 2.0, chartWidth / 2.0 + xco * xUnitW,
+				chartHeight / 2.0 - yco * yUnitW);
 	}
-	
-	
-	
+
 	class Axes extends Pane {
 		public Axes() {
 			this.setMinSize(Pane.USE_PREF_SIZE, Pane.USE_PREF_SIZE);
@@ -75,7 +90,7 @@ public class CartesianPane extends Pane {
 			yAxis.setMinorTickVisible(false);
 			yAxis.setPrefHeight(chartHeight);
 //			yAxis.setLayoutX(chartWidth / 2.0);
-			yAxis.layoutXProperty().bind(Bindings.subtract((chartWidth / 2) +1, yAxis.widthProperty()));
+			yAxis.layoutXProperty().bind(Bindings.subtract((chartWidth / 2) + 1, yAxis.widthProperty()));
 
 			getChildren().setAll(xAxis, yAxis);
 		}

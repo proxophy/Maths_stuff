@@ -157,7 +157,7 @@ public class mv_GUI implements ActionListener {
 				return;
 			}
 			
-			Matrix AB = A.product(B);
+			Matrix AB = A.getProduct(B);
 			String resultAB =  AB.toString().replaceAll("\n", "<br>");
 			
 			String result = String.format("<html>%s</html>", resultAB);

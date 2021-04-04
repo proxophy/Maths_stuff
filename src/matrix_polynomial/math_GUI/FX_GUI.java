@@ -27,6 +27,7 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import matrices_polynomials.Matrix;
+import matrices_polynomials.Vector;
 
 public class FX_GUI extends Application {
 	// Calculator Elements
@@ -142,6 +143,8 @@ public class FX_GUI extends Application {
 		double yTickUnit = 1;
 
 		CartesianPane cartPane = new CartesianPane(chartWidth, chartHeight, minX, maxX, xTickUnit, minY, maxY, yTickUnit);
+		Vector v = new Vector(new double[] {-4, 5});
+		cartPane.drawVector(v);
 		canvas_pane.getChildren().add(cartPane);
 
 	}
@@ -151,11 +154,11 @@ public class FX_GUI extends Application {
 		if (A != null && B != null) {
 			Matrix result = null;
 			if (mult.isSelected()) {
-				result = A.product(B);
+				result = A.getProduct(B);
 			} else if (add.isSelected()) {
-				result = A.sum(B);
+				result = A.getSum(B);
 			} else if (subt.isSelected()) {
-				result = A.difference(B);
+				result = A.getDifference(B);
 			} else {
 				result_label.setText("Choose (valid) operation");
 				return;

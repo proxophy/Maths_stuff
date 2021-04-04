@@ -13,14 +13,14 @@ public class Vector extends Matrix implements Comparable<Vector> {
 		Vector q = new Vector(new double[][] { { 6.0 }, { 3 } });
 		Vector[] vectors_list = new Vector[] {v,q};
 		//vectors_list.sort();
-		ArrayList<Vector> vectors = new ArrayList<Vector>();
-		vectors.add(q);
-		vectors.add(v);
-		System.out.println(vectors);
-		Collections.sort(vectors);
-		System.out.println(vectors);
+//		ArrayList<Vector> vectors = new ArrayList<Vector>();
+//		vectors.add(q);
+//		vectors.add(v);
+//		System.out.println(vectors);
+//		Collections.sort(vectors);
+//		System.out.println(vectors);
 		
-		Vector w = new Vector(new double[][] { { 3.0 }, { 12.0 }, { 4.0 } });
+		Vector w = new Vector(new double[] {2, 3});
 		
 	}
 
@@ -35,14 +35,20 @@ public class Vector extends Matrix implements Comparable<Vector> {
 	}
 
 	public Vector(double[] elements) {
-		super(new double[elements.length][]);
-		for (int i = 0; i < elements.length; i++) {
-			elems[i][0] = elements[i];
-		}
+		
+		super(convertElemsArray(elements));
 		this.elems_1d = elements;
 		this.dim = this.elems.length;
 	}
 
+	private static double[][] convertElemsArray(double[] elements) {
+		double[][] new_elems = new double[elements.length][1];
+		for (int i = 0; i < elements.length; i++) {
+			new_elems[i][0] = elements[i];
+		}
+		return new_elems;
+	}
+	
 	private double dot_product(Vector w) {
 
 		if (w.m != this.m) {
@@ -67,6 +73,10 @@ public class Vector extends Matrix implements Comparable<Vector> {
 
 	public int getDim() {
 		return dim;
+	}
+	
+	public double[] get_elems_1d() {
+		return elems_1d;
 	}
 	
 	@Override
