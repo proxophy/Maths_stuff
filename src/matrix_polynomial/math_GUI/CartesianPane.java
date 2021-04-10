@@ -45,32 +45,27 @@ public class CartesianPane extends Pane {
 		Axes axes = new Axes();
 		canvas = new Canvas(chartWidth, chartHeight);
 		gc = canvas.getGraphicsContext2D();
-		
 
 		this.getChildren().addAll(axes, canvas);
 
 	}
 
-	private void draw() {
-		gc.setLineWidth(5.0);
-		gc.setStroke(Color.RED);
-		gc.strokeLine(chartWidth / 2.0, chartHeight / 2.0, chartWidth / 2.0 + 3 * xUnitW,
-				chartHeight / 2.0 - yUnitW * 7.0);
-
-	}
-
-	public void drawVector(Vector v) {
+	public void drawVector(Vector v, Color color) {
 		double xco = v.get_elems_1d()[0];
 		double yco = v.get_elems_1d()[1];
 
-		if (v.getDim() != 2 || yco < minY || yco > maxY  || xco < minX || xco > maxX) {
+		if (v.getDim() != 2 || yco < minY || yco > maxY || xco < minX || xco > maxX) {
 			return;
 		}
 
 		gc.setLineWidth(5.0);
-		gc.setStroke(Color.RED);
+		gc.setStroke(color);
 		gc.strokeLine(chartWidth / 2.0, chartHeight / 2.0, chartWidth / 2.0 + xco * xUnitW,
 				chartHeight / 2.0 - yco * yUnitW);
+	}
+
+	public void clearCanvas() {
+		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 	}
 
 	class Axes extends Pane {

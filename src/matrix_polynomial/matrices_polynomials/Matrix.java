@@ -219,6 +219,10 @@ public class Matrix {
 		return vector();
 	}
 
+	public double[][] getElements(){
+		return elems;
+	}
+	
 	@Override
 	public String toString() {
 
