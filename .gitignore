@@ -1,3 +1,3 @@
 /bin/
-src/matrix_polynomial/graphs/Graph.java
-src/matrix_polynomial/graphs/DirGraph.java
+/src/matrix_polynomial/graphs/Graph.java
+/src/matrix_polynomial/graphs/DirGraph.java
