@@ -1,10 +1,8 @@
-// Undirected Graph
-
 package graphs;
 
 import java.util.LinkedList;
 
-public class MyGraph {
+public class DirGraph {
 	private int n; // number of vertices
 	private int m; // number of edges
 	private boolean weighted;
@@ -12,9 +10,8 @@ public class MyGraph {
 	private boolean[][] adj_matrix = new boolean[n][n];
 	private LinkedList<LinkedList<Integer>> adj_list = new LinkedList<LinkedList<Integer>>();
 
-	private boolean connected;
 
-	public MyGraph(int vertices, boolean weighted) {
+	public DirGraph(int vertices, boolean weighted) {
 		this.n = vertices;
 		this.weighted = weighted;
 	}
@@ -25,9 +22,7 @@ public class MyGraph {
 			return false; // edge already exists
 
 		adj_list.get(u).add(v);
-		adj_list.get(v).add(u);
 		adj_matrix[u][v] = true;
-		adj_matrix[v][u] = true;
 		m++;
 
 		return true;
@@ -39,11 +34,8 @@ public class MyGraph {
 			return false; // edge already exists
 
 		adj_list.get(u).add(v);
-		adj_list.get(v).add(u);
 		adj_matrix[u][v] = true;
-		adj_matrix[v][u] = true;
 		weights[u][v] = weight;
-		weights[v][u] = weight;
 		m++;
 
 		return true;
@@ -61,17 +53,8 @@ public class MyGraph {
 			i++;
 		}
 
-		i = 0;
-		for (int w : adj_list.get(v)) {
-			if (w == u)
-				adj_list.get(v).remove(i); // remove u
-			i++;
-		}
-
 		adj_matrix[u][v] = false;
-		adj_matrix[v][u] = false;
 		weights[u][v] = 0;
-		weights[v][u] = 0;
 
 		return true;
 	}
@@ -93,8 +76,6 @@ public class MyGraph {
 		// Process each node from 0 to n-1
 		for (int i = 0; i < n; i++) {
 			if (!visited[i]) {
-				if (i > 0)
-					connected = false;
 
 				LinkedList<Integer> stack = new LinkedList<Integer>();
 				stack.add(i);
@@ -241,15 +222,51 @@ public class MyGraph {
 		return true;
 	}
 	
-	public boolean isConnected() {
-		return connected;
+	public boolean hasEulerianCycle() {
+
+		LinkedList<Integer> stack = new LinkedList<Integer>();
+		int counter = 0;
+		int curr = 0;
+		boolean[][] marked = new boolean[n][];
+
+		for (int i = 0; i < n; i++) {
+			marked[i] = new boolean[adj_list.get(i).size()];
+		}
+
+		stack.addLast(0);
+
+		while (!stack.isEmpty() && counter < m) {
+
+			curr = stack.getLast();
+			// find unmarked edge
+			if (adj_list.get(curr).size() != 0) {
+				boolean finished = true;
+
+				for (int i = 0; i <adj_list.get(curr).size(); i++) {
+					if (marked[curr][i] == false) {
+						finished = false;
+						marked[curr][i] = true;
+						stack.addLast(adj_list.get(curr).get(i));
+						counter++;
+						break;
+					}
+				}
+
+				if (finished) {
+					stack.removeLast();
+				}
+
+			} else {
+				stack.pollLast();
+			}
+		}
+
+		if (counter == m) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 	
-	/*
-	 * TODO: Reachable
-	 * 
-	 * TODO Directed: DFS, BFS: Reachable isTopologicalsort orderedtriple
-	 * Eulerianpath and eulercycle
-	 */
-
 }
