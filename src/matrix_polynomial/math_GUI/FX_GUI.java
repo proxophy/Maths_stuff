@@ -50,11 +50,10 @@ public class FX_GUI extends Application {
 	private void initUI(Stage stage) {
 
 		Label matrix_A_desc = new Label("Matrix A");
-		matrix_A_text = new TextField("1,2,3;4,5,6;");
+		matrix_A_text = new TextField("1,1,1;1,1,1;");
 
 		Label matrix_B_desc = new Label("Matrix B");
-//		matrix_B_dim_text = new TextField("2 1");
-		matrix_B_text = new TextField("1,2;3,4;5,6;");
+		matrix_B_text = new TextField("1;2;3");
 
 		matrix_A_label = new Label("A will be displayed here");
 		matrix_B_label = new Label("B will be displayed here");
@@ -161,7 +160,8 @@ public class FX_GUI extends Application {
 	}
 
 	private void binary_function() {
-		disp_btn_action();
+
+		create_matrices();
 		if (A != null && B != null) {
 			if (mult.isSelected()) {
 				R = A.getProduct(B);
@@ -184,6 +184,7 @@ public class FX_GUI extends Application {
 		} else {
 			result_label.setText("One of the matrices is null");
 		}
+		disp_btn_action();
 
 	}
 
@@ -277,14 +278,21 @@ public class FX_GUI extends Application {
 				cartPane.drawVector(new Vector(B.getElements()), Color.HOTPINK);
 			}
 
-		} else if (A == null) {
-			matrix_A_label.setText("Error: Check dimension \nor entries of matrix A");
-			matrix_B_label.setText(B.toString());
-		} else if (B == null) {
-			matrix_A_label.setText(A.toString());
-			matrix_B_label.setText("Error: Check dimension \nor entries of matrix B");
+		} else {
+
+			if (A == null) {
+				matrix_A_label.setText("Error: Check dimension \nor entries of matrix A");
+				matrix_B_label.setText(B.toString());
+			}
+			if (B == null) {
+				matrix_A_label.setText(A.toString());
+				matrix_B_label.setText("Error: Check dimension \nor entries of matrix B");
+			}
 		}
 
+		if (R != null && R.is_vector()) {
+			cartPane.drawVector(new Vector(R.getElements()), Color.DARKGREEN);
+		}
 	}
 
 	private void clear_btn_action() {

@@ -55,6 +55,7 @@ public class CartesianPane extends Pane {
 		double yco = v.get_elems_1d()[1];
 
 		if (v.getDim() != 2 || yco < minY || yco > maxY || xco < minX || xco > maxX) {
+			System.out.println("cannot be drawn");
 			return;
 		}
 
