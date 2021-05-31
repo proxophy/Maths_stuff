@@ -25,7 +25,7 @@ public class Graph {
 		for (int i = 0; i < m; i++) {
 			degrees[edge_array[i][0]]++;
 			degrees[edge_array[i][1]]++;
-		//	g_edges[i] = new Edge(edge_array[i][0], edge_array[i][1], edge_array[i][1]);
+			// g_edges[i] = new Edge(edge_array[i][0], edge_array[i][1], edge_array[i][1]);
 		}
 
 		edges = new int[n][];
@@ -51,37 +51,24 @@ public class Graph {
 			degrees[edge_array[i][1]]++;
 		}
 	}
-	
+
 	// TODO Kruskal
 	/*
-	public long kruskal() {
-
-		long cost = 0;
-		//
-		// Sort the edges
-		//
-		Arrays.sort(g_edges, new Comparator<Edge>() {
-			public int compare(Edge o1, Edge o2) {
-				return o1.w - o2.w;
-			}
-		});
-
-		UnionFind ufind = new UnionFind(V);
-		int size = 0; // size of graph G resulting in span tree
-		int i = 0;
-		while (size < V && i < E) {
-			Edge cur = g_edges[i];
-			if (ufind.find(cur.u) != ufind.find(cur.v)) {
-				cost += cur.w;
-				ufind.union(cur.u, cur.v);
-				size++;
-			}
-			i++;
-		}
-
-		return cost;
-
-	} */
+	 * public long kruskal() {
+	 * 
+	 * long cost = 0; // // Sort the edges // Arrays.sort(g_edges, new
+	 * Comparator<Edge>() { public int compare(Edge o1, Edge o2) { return o1.w -
+	 * o2.w; } });
+	 * 
+	 * UnionFind ufind = new UnionFind(V); int size = 0; // size of graph G
+	 * resulting in span tree int i = 0; while (size < V && i < E) { Edge cur =
+	 * g_edges[i]; if (ufind.find(cur.u) != ufind.find(cur.v)) { cost += cur.w;
+	 * ufind.union(cur.u, cur.v); size++; } i++; }
+	 * 
+	 * return cost;
+	 * 
+	 * }
+	 */
 
 	public boolean isBipartite() {
 		boolean[] dfs_done = new boolean[n];
@@ -153,45 +140,45 @@ public class Graph {
 		return true;
 	}
 
-	public LinkedList<Integer> DFS_search(){
-	    LinkedList<Integer> DFS_order = new LinkedList<Integer>();
-	    boolean [] visited = new boolean[n];
-	    
-	    // Process each node from 0 to n-1
-	    for(int i=0;i<n;i++){
-	      if(!visited[i]){
-	        LinkedList<Integer> stack = new LinkedList<Integer>();
-	        stack.add(i);
-	            
-	        while(!stack.isEmpty()){
-	          int last = stack.getLast();
-	          boolean finished  = false;
-	          boolean added = false;
-	        
-	          if (degrees[last] != 0){
-	            for (int j = 0; j < degrees[last]; j++){
-	              int w = edges[last][j];
-	              // vertex is added to the  stack
-	              if (!added && !visited[w]){
-	                added = true;
-	                visited[w] = true;
-	                stack.add(w);
-	                DFS_order.add(w);
-	              }
-	            }
-	            finished = !added;
-	          } else {
-	            finished = true;
-	          }
-	        
-	          if (finished){
-	            stack.removeLast();
-	          }
-	        }   
-	      }
-	    }
-	    return DFS_order;
-	    }
+	public LinkedList<Integer> DFS_search() {
+		LinkedList<Integer> DFS_order = new LinkedList<Integer>();
+		boolean[] visited = new boolean[n];
+
+		// Process each node from 0 to n-1
+		for (int i = 0; i < n; i++) {
+			if (!visited[i]) {
+				LinkedList<Integer> stack = new LinkedList<Integer>();
+				stack.add(i);
+
+				while (!stack.isEmpty()) {
+					int last = stack.getLast();
+					boolean finished = false;
+					boolean added = false;
+
+					if (degrees[last] != 0) {
+						for (int j = 0; j < degrees[last]; j++) {
+							int w = edges[last][j];
+							// vertex is added to the stack
+							if (!added && !visited[w]) {
+								added = true;
+								visited[w] = true;
+								stack.add(w);
+								DFS_order.add(w);
+							}
+						}
+						finished = !added;
+					} else {
+						finished = true;
+					}
+
+					if (finished) {
+						stack.removeLast();
+					}
+				}
+			}
+		}
+		return DFS_order;
+	}
 }
 
 class Edge {
